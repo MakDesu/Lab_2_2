@@ -11,30 +11,106 @@ namespace Lab_2_2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=== Тестування класу ComputerFirmClient ===");
+            List<ComputerFirmClient> clients = new List<ComputerFirmClient>();
+            string command;
 
-            // Створення об'єкта клієнта за допомогою конструктора з параметрами
-            ComputerFirmClient client = new ComputerFirmClient(1, "Іван Іванов", "ivan.ivanov@gmail.com", "+380123456789", "м. Київ, вул. Шевченка, 12");
+            Console.WriteLine("=== Керування клієнтами комп'ютерної фірми ===");
+            Console.WriteLine("Доступні команди:");
+            Console.WriteLine("add - Додати клієнта");
+            Console.WriteLine("remove - Видалити клієнта за ID");
+            Console.WriteLine("list - Відобразити список клієнтів");
+            Console.WriteLine("exit - Вийти з програми");
 
-            // Відображення інформації про клієнта
-            Console.WriteLine("\nІнформація про клієнта:");
-            client.DisplayInfo();
+            do
+            {
+                Console.Write("\nВведіть команду: ");
+                command = Console.ReadLine()?.ToLower();
 
-            // Зміна деяких властивостей об'єкта
-            Console.WriteLine("\nОновлюємо інформацію про клієнта...");
-            client.Name = "Петро Петров";
-            client.Email = "petro.petrov@gmail.com";
+                switch (command)
+                {
+                    case "add":
+                        AddClient(clients);
+                        break;
 
-            // Відображення оновленої інформації
-            Console.WriteLine("\nОновлена інформація про клієнта:");
-            client.DisplayInfo();
+                    case "remove":
+                        RemoveClient(clients);
+                        break;
 
-            // Завершення програми
-            Console.WriteLine("\nТестування завершено.");
+                    case "list":
+                        ListClients(clients);
+                        break;
 
+                    case "exit":
+                        Console.WriteLine("Завершення роботи...");
+                        break;
 
+                    default:
+                        Console.WriteLine("Невідома команда. Спробуйте ще раз.");
+                        break;
+                }
+            } while (command != "exit");
         }
 
+        static void AddClient(List<ComputerFirmClient> clients)
+        {
+            Console.WriteLine("\n=== Додавання нового клієнта ===");
+            Console.Write("Введіть ID клієнта: ");
+            int id = int.Parse(Console.ReadLine() ?? "0");
+
+            Console.Write("Введіть ім'я клієнта: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Введіть email клієнта: ");
+            string email = Console.ReadLine();
+
+            Console.Write("Введіть телефон клієнта: ");
+            string phone = Console.ReadLine();
+
+            Console.Write("Введіть адресу клієнта: ");
+            string address = Console.ReadLine();
+
+            clients.Add(new ComputerFirmClient(id, name, email, phone, address));
+            Console.WriteLine("Клієнт успішно доданий!");
+        }
+
+        static void RemoveClient(List<ComputerFirmClient> clients)
+        {
+            Console.WriteLine("\n=== Видалення клієнта ===");
+            Console.Write("Введіть ID клієнта для видалення: ");
+            int id = int.Parse(Console.ReadLine() ?? "0");
+
+            var client = clients.Find(c => c.ClientId == id);
+            if (client != null)
+            {
+                clients.Remove(client);
+                Console.WriteLine("Клієнт успішно видалений!");
+            }
+            else
+            {
+                Console.WriteLine("Клієнта з таким ID не знайдено.");
+            }
+        }
+
+        static void ListClients(List<ComputerFirmClient> clients)
+        {
+            Console.WriteLine("\n=== Список клієнтів ===");
+            if (clients.Count == 0)
+            {
+                Console.WriteLine("Список клієнтів порожній.");
+                return;
+            }
+
+            foreach (var client in clients)
+            {
+                client.DisplayInfo();
+                Console.WriteLine("---");
+            }
+        }
     }
-        
+
+         
+     
+     
+
+            
 }
